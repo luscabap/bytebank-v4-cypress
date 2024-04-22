@@ -1,20 +1,16 @@
-describe('Formulario de Login', ()=>{
-  beforeEach(()=>{
-    cy.visit('http://localhost:3000')
-  })
-
-  it('Não deve permitir um email inválido', ()=>{
+describe('Formulario de Login', () => {
+  it('Validação e-mail ou senha incorretos', () => {
+    cy.visit("/");
     cy.getByDataTest('botao-login').click()
-    cy.getByDataTest('email-input').type('lucas@gmail.com')
+    cy.getByDataTest('email-input').type('lucasX@gmail.com')
     cy.getByDataTest('senha-input').type('123')
     cy.getByDataTest('botao-enviar').click()
-    cy.getByDataTest('mensagem-erro').should('exist').and('have.text', 'O email digitado é inválido')
+    cy.get('span').should('exist').and('have.text', 'E-mail ou senha incorretos')
   })
 
-  it.only('Não deve permitir um campo em branco', ()=>{
-    cy.getByDataTest('botao-login').click()
-    cy.getByDataTest('senha-input').type('123')
-    cy.getByDataTest('botao-enviar').click()
-    cy.getByDataTest('mensagem-erro').should('exist').and('have.text', 'O campo email é obrigatório')
+  it("Deve acessar a página home", () => {
+    cy.efetuarLogin('lucas@gmail.com', '123')
+    cy.visit('/home')
+    cy.getByDataTest('titulo-boas-vindas').should('contain', 'Bem vindo de volta!');
   })
 })
