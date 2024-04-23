@@ -3,7 +3,7 @@ describe('Formulário Cadastro', ()=>{
     cy.visit('http://localhost:3000')
   })
 
-  it('Usuário deve conseguir se cadastrar com sucesso', ()=>{
+  it('Usuário deve conseguir se cadastrar com sucesso', () => {
     cy.getByDataTest('botao-cadastro').click()
     cy.getByDataTest('nome-input').type('Teste')
     cy.getByDataTest('email-input').type('teste@gmail.com')
