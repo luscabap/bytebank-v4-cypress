@@ -28,5 +28,25 @@ describe("Realizando requisições para a API", () => {
                 expect(response.body).to.eq('Not Found')
             })
         })
+    });
+
+    context("Interceptando solicitações de rede", () => {
+        it("Deve fazer a interceptação do método POST para a rota users/login", () => {
+            Cypress.session.clearAllSavedSessions();
+            cy.intercept('POST', 'users/login').as("loginRequest");
+            cy.efetuarLogin("lucas@gmail.com", '123');
+            cy.wait('@loginRequest').then((interception) => {
+                interception.response = {
+                    statusCode: 200,
+                    body: {
+                        sucess: true,
+                        message: "Login bem sucedido"
+                    }
+                }
+            })
+            cy.visit('/home')
+
+            cy.getByDataTest("titulo-boas-vindas").should('contain.text', 'Bem vindo de volta!')
+        })
     })
 })
