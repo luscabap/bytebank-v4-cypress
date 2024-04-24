@@ -50,7 +50,7 @@ describe("Realizando requisições para a API", () => {
         })
     });
 
-    context.only("PUT - Alterando senha e e-mail", () => {
+    context("PUT - Alterando senha e e-mail", () => {
         it("Deve fazer a interceptação do método PUT para a rota users/:id", () => {
             const usuario = {
                 nome: 'Lucas Baptista',
@@ -69,6 +69,21 @@ describe("Realizando requisições para a API", () => {
                 expect(response.body.nome).to.eq(usuario.nome);
                 expect(response.body.senha).to.eq(usuario.senha);
                 expect(response.body).to.have.property('id').and.to.eq(`${idUsuario}`);
+            })
+        })
+    });
+
+    context.only("POST - Realizando login", () => {
+        it("Deve permitir login do usuário Lucas Baptista", () => {
+            cy.request({
+                method: "POST",
+                url: "http://localhost:8000/users/login",
+                body: Cypress.env(),
+            }).then(response => {
+                expect(response.status).to.equal(200)
+                expect(response.body).is.not.empty
+                expect(response.body.user).to.have.property('nome')
+                expect(response.body.user.nome).to.eq('Lucas Baptista')
             })
         })
     })
