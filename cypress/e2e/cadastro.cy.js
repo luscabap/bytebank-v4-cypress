@@ -1,9 +1,12 @@
+import { faker } from '@faker-js/faker';
+
 describe("Teste de cadastro de usuário", () => {
     const usuario = {
-        nome: "Mauz",
-        email: "mauzzz@gmail.com",
-        senha: "123"
+        nome: faker.name.fullName(),
+        email: faker.internet.email(),
+        senha: faker.internet.password()
     }
+
     it("Deve permitir cadastrar um usuário com sucesso", () => {
         cy.viewport(1920, 1080)
         cy.visit('/')
@@ -17,8 +20,8 @@ describe("Teste de cadastro de usuário", () => {
         cy.getByDataTest("mensagem-sucesso").should("exist").contains('Usuário cadastrado com sucesso!');
 
         cy.request('GET', 'http://localhost:8000/users').then(response => {
-            expect(response.body).to.have.lengthOf.at.least(1)
-            expect(response.body[response.body.length - 1]).to.deep.include(usuario)
+            expect(response.body).to.have.lengthOf.at.least(1);
+            expect(response.body[response.body.length - 1]).to.deep.include(usuario);
         })
     })
 })

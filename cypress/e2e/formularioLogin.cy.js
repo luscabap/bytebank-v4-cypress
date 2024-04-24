@@ -13,4 +13,16 @@ describe('Formulario de Login', () => {
     cy.visit('/home')
     cy.getByDataTest('titulo-boas-vindas').should('contain', 'Bem vindo de volta!');
   })
+
+  it.only("Deve acessar a página home", () => {
+    cy.fixture('usuarios').then(usuario => {
+      usuario.map(x => (
+        cy.efetuarLogin(x.email, x.senha), 
+        cy.visit('/home'),
+        cy.url().should('include', '/home'),
+        cy.getByDataTest('titulo-boas-vindas').should('contain', 'Bem vindo de volta!'),
+        cy.contains(x.nome).should('be.visible')
+    ))
+    })
+  })
 })
